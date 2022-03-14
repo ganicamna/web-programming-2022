@@ -2,7 +2,7 @@
 require 'vendor/autoload.php';
 
 Flight::route('/', function(){
-  echo 'Hello World!!';
+  echo 'Vtp zimga';
 });
 
 Flight::start();
