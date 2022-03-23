@@ -1,6 +1,6 @@
 <?php
 
-class PhotographyAppDao{
+class UserDao{
 
   private $conn;
 
@@ -27,11 +27,23 @@ class PhotographyAppDao{
   }
 
   /**
+  * Method user to read user by ID
+  */
+  public function get_by_id($id){
+    $stmt = $this->conn->prepare("SELECT * FROM users WHERE idusers = :id");
+    $stmt->execute(['id' => $id]); //?
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return reset($result);
+  }
+
+  /**
   * Method used to add todo to the database
   */
-  public function add($name, $age, $registered, $speciality){
+  public function add($user){
     $stmt = $this->conn->prepare("INSERT INTO users (name, age, registered, speciality) VALUES (:name, :age, :registered, :speciality)");
-    $stmt->execute(['name' => $name, 'age' => $age, 'registered' => $registered, 'speciality' => $speciality]);
+    $stmt->execute($user);
+    $user['id']=$this->conn->lastInsertId();
+    return $todo;
   }
 
   /**
@@ -46,9 +58,10 @@ class PhotographyAppDao{
   /**
   * Update todo record
   */
-  public function update($id, $name, $age, $registered, $speciality){
-    $stmt = $this->conn->prepare("UPDATE users SET name=:name, age=:age, registered=:registered, speciality=:speciality  WHERE id=:id");
-    $stmt->execute(['id' => $id, 'name' => $name, 'age' => $age, 'registered' => $registered, 'speciality' => $speciality]);
+  public function update($user){
+    $stmt = $this->conn->prepare("UPDATE users SET name=:name, age=:age, registered=:registered, speciality=:speciality  WHERE idusers=:id"); //?
+    $stmt->execute($user);
+    return $user;
   }
 
 }
