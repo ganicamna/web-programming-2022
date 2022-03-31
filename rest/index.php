@@ -36,7 +36,7 @@ Flight::route('POST /users', function(){
 */
 Flight::route('PUT /users/@id', function($id){
   $data = Flight::request()->data->getData();
-  $data['id'] = $id; //?
+  $data['id'] = $id;
   Flight::json(Flight::userDao()->update($data));
 });
 
