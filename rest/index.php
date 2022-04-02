@@ -8,7 +8,7 @@ require_once '../vendor/autoload.php';
 
 Flight::register('userDao', 'UserDao'); //?
 
-// CRUD operations for todos entity
+// CRUD operations for users entity
 
 /**
 * List all users
