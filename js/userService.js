@@ -24,8 +24,8 @@ var UserService = {
                 <p class="card-text">`+ data[i].registered +`</p>
                 <p class="card-text">`+ data[i].speciality +`</p>
                 <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-primary todo-button" onclick="UserService.get(`+data[i].id+`)">Edit</button>
-                  <button type="button" class="btn btn-danger todo-button" onclick="UserService.delete(`+data[i].id+`)">Delete</button>
+                  <button type="button" class="btn btn-primary user-button" onclick="UserService.get(`+data[i].id+`)">Edit</button>
+                  <button type="button" class="btn btn-danger user-button" onclick="UserService.delete(`+data[i].id+`)">Delete</button>
                 </div>
               </div>
             </div>
@@ -94,7 +94,7 @@ var UserService = {
         url: 'rest/users/'+id,
         type: 'DELETE',
         success: function(result) {
-            $("#todo-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
+            $("#user-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
             UserService.list();
         }
       });

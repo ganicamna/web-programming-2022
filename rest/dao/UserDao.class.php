@@ -18,7 +18,7 @@ class UserDao{
   }
 
   /**
-  * Method used to read all todo objects from database
+  * Method used to read all user objects from database
   */
   public function get_all(){
     $stmt = $this->conn->prepare("SELECT * FROM users");
@@ -37,7 +37,7 @@ class UserDao{
   }
 
   /**
-  * Method used to add todo to the database
+  * Method used to add user to the database
   */
   public function add($user){
     $stmt = $this->conn->prepare("INSERT INTO users (name, age, registered, speciality) VALUES (:name, :age, :registered, :speciality)");
@@ -47,19 +47,19 @@ class UserDao{
   }
 
   /**
-  * Delete todo record from the database
+  * Delete user record from the database
   */
   public function delete($id){
-    $stmt = $this->conn->prepare("DELETE FROM users WHERE idusers=:id");
+    $stmt = $this->conn->prepare("DELETE FROM users WHERE id=:id");
     $stmt->bindParam(':id', $id); // SQL injection prevention
     $stmt->execute();
   }
 
   /**
-  * Update todo record
+  * Update user record
   */
   public function update($user){
-    $stmt = $this->conn->prepare("UPDATE users SET name=:name, age=:age, registered=:registered, speciality=:speciality  WHERE idusers=:id"); //?
+    $stmt = $this->conn->prepare("UPDATE users SET name=:name, age=:age, speciality=:speciality  WHERE id=:id"); //?
     $stmt->execute($user);
     return $user;
   }
