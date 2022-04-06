@@ -8,10 +8,10 @@ class UserDao{
   * constructor of dao class
   */
   public function __construct(){
-    $servername = "sql11.freemysqlhosting.net";
-    $username = "sql11479691";
-    $password = "qByw4gTz3G";
-    $schema = "sql11479691";
+    $servername = "localhost";
+    $username = "root";
+    $password = ""; //tvoja sifra
+    $schema = "users";
     $this->conn = new PDO("mysql:host=$servername;dbname=$schema", $username, $password);
     // set the PDO error mode to exception
     $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -30,7 +30,7 @@ class UserDao{
   * Method user to read user by ID
   */
   public function get_by_id($id){
-    $stmt = $this->conn->prepare("SELECT * FROM users WHERE idusers = :id");
+    $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
     $stmt->execute(['id' => $id]); //?
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return reset($result);
@@ -43,7 +43,7 @@ class UserDao{
     $stmt = $this->conn->prepare("INSERT INTO users (name, age, registered, speciality) VALUES (:name, :age, :registered, :speciality)");
     $stmt->execute($user);
     $user['id']=$this->conn->lastInsertId();
-    return $todo;
+    return $user;
   }
 
   /**

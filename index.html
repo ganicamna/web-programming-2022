@@ -5,8 +5,13 @@
 <head>
   <meta charset="utf-8">
   <title>PhotograpyApp</title>
-  <link href="css.bootstrap.min.css" rel="stylesheet">
-  </head>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .error{
+      color:red;
+    }
+  </style>
+</head>
 
 <body>
   <header>
@@ -40,6 +45,12 @@
   <main>
     <div class="container marketing" style="margin-top:100px;">
       <!-- Three columns of text below the carousel -->
+      <div class="row">
+        <div>
+          <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
+        </div>
+      </div>
+
       <div id="user-list" class="row">
         <div class="spinner-border" role="status">
           <span class="sr-only"></span>
@@ -53,87 +64,8 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/jquery.validate.min.js"></script>
+<script src="js/userService.js"></script>
 
-<script>
-
-  getUsers();
-
-   function getUsers(){
-     $.get("rest/users", function(data) {
-
-       $("#user-list").html("");
-
-       var html = "";
-       for(let i = 0; i < data.length; i++){
-         html += `
-         <div class="col-lg-4">
-           <h2>`+ data[i].name +`</h2>
-           <p>`+ "Age: " + data[i].age + ". Registered: " + data[i].registered + ". Speciality: " + data[i].speciality`</p>
-           <p>
-             <button type="button" class="btn btn-primary user-button" onclick="showModal(`+data[i].id+`)" >
-               Launch demo modal
-             </button>
-           </p>
-         </div>`;
-       }
-       $("#user-list").html(html);
-       console.log(data);
-     });
-   }
-
-   function showEditModal(id){
-     $('.user-button').attr('disabled', true);
-     $.get('rest/users/'+id, function(data){
-       console.log(data);
-       $("#name").val(data.name);
-       $("#age").val(data.age);
-       $("#registered").val(data.registered);
-       $("#speciality").val(data.speciality);
-       $("#id").val(data.id);
-       $("#exampleModal").modal("show");
-       $('.user-button').attr('disabled', false);
-     })
-   }
-
-   function updateUser(){
-     $('.save-user-button').attr('disabled', true);
-     var user = {};
-
-     todo.name = $('#name').val();
-     todo.age = $('#age').val();
-     todo.registered = $('#registered').val();
-     todo.speciality = $('#speciality').val();
-
-     $.ajax({
-       url: 'rest/users/'+$('#id').val(),
-       type: 'PUT',
-       data: JSON.stringify(user),
-       contentType: "application/json",
-       dataType: "json",
-       success: function(result) {
-           $("#exampleModal").modal("hide");
-           $('.save-user-button').attr('disabled', false);
-           $("#user-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
-           getUsers(); // perf optimization
-           console.log(result);
-       }
-     });
-
-     console.log(user);
-   }
-
-   function deleteUser(id){
-     $.ajax({
-    url: '/script.cgi',
-    type: 'DELETE',
-    success: function(result) {
-        // Do something with the result
-    }
-});
-   }
-
-
- </script>
 
  <!-- Modal -->
  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -145,7 +77,7 @@
        </div>
        <div class="modal-body">
          <input id="id" type="hidden" />
-         <input id="name" type="text" />
+        <div class="form-group"> <input id="name" type="text" class="form-control"/></div>
          <input id="age" type="text" />
          <input id="registered" type="text" />
          <input id="speciality" type="text" />
@@ -153,7 +85,7 @@
        </div>
        <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-         <button type="button" class="btn btn-primary save-user-button" onclick="userService.update()">Save changes</button>
+         <button type="button" class="btn btn-primary save-user-button" onclick="UserService.update()">Save changes</button>
        </div>
      </div>
    </div>
@@ -176,6 +108,8 @@
             <div class="form-group">
               <label>Age</label>
               <input name="age" type="text" class="form-control required" placeholder="Enter age">
+            </div>
+
             <div class="form-group">
               <label>Speciality</label>
               <input name="speciality" type="text" class="form-control required" placeholder="Enter speciality">
@@ -183,11 +117,15 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" onclick="userService.add()">Submit</button>
+          <button type="submit" class="btn btn-primary" onclick="UserService.init()">Submit</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<script>
+  UserService.init();
+</script>
 
 </html>

@@ -21,14 +21,16 @@ Flight::route('GET /users', function(){
 * List invidiual user
 */
 Flight::route('GET /users/@id', function($id){
-  Flight::json(Flight::todoDao()->get_by_id($id));
+  Flight::json(Flight::userDao()->get_by_id($id));
 });
 
 /**
 * add user
 */
 Flight::route('POST /users', function(){
-  Flight::json(Flight::userDao()->add(Flight::request()->data->getData()));
+  $data = Flight::request()->data->getData();
+  $data['registered'] = date("Y-m-d H:i:s");
+  Flight::json(Flight::userDao()->add($data));
 });
 
 /**
