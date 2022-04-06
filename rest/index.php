@@ -8,7 +8,7 @@ require_once '../vendor/autoload.php';
 
 Flight::register('userDao', 'UserDao'); //?
 
-// CRUD operations for users entity
+// CRUD operations for todos entity
 
 /**
 * List all users
@@ -21,7 +21,7 @@ Flight::route('GET /users', function(){
 * List invidiual user
 */
 Flight::route('GET /users/@id', function($id){
-  Flight::json(Flight::userDao()->get_by_id($id));
+  Flight::json(Flight::todoDao()->get_by_id($id));
 });
 
 /**

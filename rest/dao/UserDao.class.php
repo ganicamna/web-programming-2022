@@ -10,7 +10,7 @@ class UserDao{
   public function __construct(){
     $servername = "localhost";
     $username = "root";
-    $password = ""; //tvoja sifra
+    $password = "";
     $schema = "users";
     $this->conn = new PDO("mysql:host=$servername;dbname=$schema", $username, $password);
     // set the PDO error mode to exception
@@ -30,7 +30,7 @@ class UserDao{
   * Method user to read user by ID
   */
   public function get_by_id($id){
-    $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
+    $stmt = $this->conn->prepare("SELECT * FROM users WHERE idusers = :id");
     $stmt->execute(['id' => $id]); //?
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return reset($result);
@@ -43,7 +43,7 @@ class UserDao{
     $stmt = $this->conn->prepare("INSERT INTO users (name, age, registered, speciality) VALUES (:name, :age, :registered, :speciality)");
     $stmt->execute($user);
     $user['id']=$this->conn->lastInsertId();
-    return $user;
+    return $todo;
   }
 
   /**
