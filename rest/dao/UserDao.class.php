@@ -8,10 +8,10 @@ class UserDao{
   * constructor of dao class
   */
   public function __construct(){
-    $servername = "sql11.freemysqlhosting.net";
-    $username = "sql11479691";
-    $password = "qByw4gTz3G";
-    $schema = "sql11479691";
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $schema = "users";
     $this->conn = new PDO("mysql:host=$servername;dbname=$schema", $username, $password);
     // set the PDO error mode to exception
     $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

@@ -52,33 +52,10 @@
 
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery.validate.min.js"></script>
 
 <script>
 
-  getUsers();
-
-   function getUsers(){
-     $.get("rest/users", function(data) {
-
-       $("#user-list").html("");
-
-       var html = "";
-       for(let i = 0; i < data.length; i++){
-         html += `
-         <div class="col-lg-4">
-           <h2>`+ data[i].name +`</h2>
-           <p>`+ "Age: " + data[i].age + ". Registered: " + data[i].registered + ". Speciality: " + data[i].speciality`</p>
-           <p>
-             <button type="button" class="btn btn-primary user-button" onclick="showModal(`+data[i].id+`)" >
-               Launch demo modal
-             </button>
-           </p>
-         </div>`;
-       }
-       $("#user-list").html(html);
-       console.log(data);
-     });
-   }
 
    function showEditModal(id){
      $('.user-button').attr('disabled', true);
@@ -132,15 +109,49 @@
        </div>
        <div class="modal-body">
          <input id="id" type="hidden" />
-         <input id="description" type="text" />
-         <input id="created" type="hidden" />
+         <input id="name" type="text" />
+         <input id="age" type="text" />
+         <input id="registered" type="text" />
+         <input id="speciality" type="text" />
+
        </div>
        <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-         <button type="button" class="btn btn-primary save-todo-button" onclick="saveTodo()">Save changes</button>
+         <button type="button" class="btn btn-primary save-user-button" onclick="userService.update()">Save changes</button>
        </div>
      </div>
    </div>
  </div>
+
+ <!-- Add Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addUserForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add user</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label>Name</label>
+              <input name="name" type="text" class="form-control required" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+              <label>Age</label>
+              <input name="age" type="text" class="form-control required" placeholder="Enter age">
+            <div class="form-group">
+              <label>Speciality</label>
+              <input name="speciality" type="text" class="form-control required" placeholder="Enter speciality">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" onclick="userService.add()">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 </html>
