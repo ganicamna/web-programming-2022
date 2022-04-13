@@ -59,7 +59,7 @@ var userService = {
         success: function(result) {
             $("#users-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
             userService.list(); // perf optimization
-            $("#addUserModal").modal("hide");
+            $("#addUserModal").modal("hide"); //trying 
         }
       });
     },
