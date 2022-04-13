@@ -1,16 +1,16 @@
 <?php
 require_once __DIR__.'/BaseDao.class.php';
 
-class TodoDao extends BaseDao{
+class UserDao extends BaseDao{
   /**
   * constructor of dao class
   */
   public function __construct(){
-    parent::__construct("todos");
+    parent::__construct("users");
   }
 
-  public function get_todos_by_note_id($note_id){
-    return $this->query("SELECT * FROM todos WHERE note_id = :note_id", ['note_id' => $note_id]);
+  public function get_users_by_note_id($note_id){
+    return $this->query("SELECT * FROM users WHERE note_id = :note_id", ['note_id' => $note_id]);
   }
 }
 

@@ -20,7 +20,7 @@ Flight::route('GET /notes/@id', function($id){
 * List invidiual note todos
 */
 Flight::route('GET /notes/@id/todos', function($id){
-  Flight::json(Flight::todoService()->get_todos_by_note_id($id));
+  Flight::json(Flight::userService()->get_users_by_note_id($id));
 });
 
 

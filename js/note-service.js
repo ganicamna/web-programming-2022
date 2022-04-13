@@ -23,7 +23,7 @@ var NoteService = {
                 <p class="card-text">`+ data[i].description +`</p>
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-primary note-button" onclick="NoteService.get(`+data[i].id+`)">Edit</button>
-                  <button type="button" class="btn btn-success note-button" onclick="TodoService.list_by_note_id(`+data[i].id+`)">Manage</button>
+                  <button type="button" class="btn btn-success note-button" onclick="UserService.list_by_note_id(`+data[i].id+`)">Manage</button>
                   <button type="button" class="btn btn-danger note-button" onclick="NoteService.delete(`+data[i].id+`)">Delete</button>
                 </div>
               </div>
@@ -42,7 +42,7 @@ var NoteService = {
         $("#id").val(data.id);
         $("#created").val(data.created);
         $("#exampleModal").modal("show");
-        $('.todo-button').attr('disabled', false);
+        $('.user-button').attr('disabled', false);
       })
     },
 
@@ -63,22 +63,22 @@ var NoteService = {
 
     update: function(){
       $('.save-note-button').attr('disabled', true);
-      var todo = {};
+      var user = {};
 
-      todo.description = $('#description').val();
-      todo.created = $('#created').val();
+      user.description = $('#description').val();
+      user.created = $('#created').val();
 
       $.ajax({
         url: 'rest/notes/'+$('#id').val(),
         type: 'PUT',
-        data: JSON.stringify(todo),
+        data: JSON.stringify(user),
         contentType: "application/json",
         dataType: "json",
         success: function(result) {
             $("#exampleModal").modal("hide");
             $('.save-note-button').attr('disabled', false);
             $("#note-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
-            ToDoService.list(); // perf optimization
+            UserService.list(); // perf optimization
         }
       });
     },

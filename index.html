@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>ToDo App</title>
+  <title>Photography App</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
   <style>
@@ -65,7 +65,7 @@
 <script src="js/jquery.validate.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="js/note-service.js"></script>
-<script src="js/todo-service.js"></script>
+<script src="js/user-service.js"></script>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -77,12 +77,14 @@
       </div>
       <div class="modal-body">
         <input id="id" type="hidden" />
-        <input id="description" type="text" />
-        <input id="created" type="hidden" />
+        <input id="name" type="text" />
+        <input id="age" type="number" />
+        <input id="registered" type="text" />
+        <input id="speciality" type="text" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary save-todo-button" onclick="ToDoService.update()">Save changes</button>
+        <button type="button" class="btn btn-primary save-user-button" onclick="UserService.update()">Save changes</button>
       </div>
     </div>
   </div>
@@ -130,17 +132,17 @@
 </div>
 
 
-<div class="modal fade" id="todoModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">ToDos</h5>
+          <h5 class="modal-title">Users</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
 
 
-            <div id="notes-todos" class="list-group">
+            <div id="notes-users" class="list-group">
               <div class="list-group-item">
                 <button class="btn btn-danger btn-sm float-end">delete</button>
                 <p class="list-group-item-text">kkkkkk</p>
@@ -154,7 +156,7 @@
         </div>
 
         <div class="row">
-          <form id="add-todo-form" class="form">
+          <form id="add-user-form" class="form">
             <input name="note_id" type="hidden" />
             <div class="row" style="padding: 20px;">
               <div class="col-sm-4">

@@ -11,9 +11,9 @@ class BaseDao{
   public function __construct($table_name){
     $this->table_name = $table_name;
     $servername = "localhost";
-    $username = "todo";
-    $password = "todo";
-    $schema = "todo";
+    $username = "root";
+    $password = "";
+    $schema = "photography";
     $this->conn = new PDO("mysql:host=$servername;dbname=$schema", $username, $password);
     // set the PDO error mode to exception
     $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
