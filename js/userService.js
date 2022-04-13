@@ -1,9 +1,9 @@
 var userService = {
     init: function(){
-      $('#addToDoForm').validate({
+      $('#addUserForm').validate({
         submitHandler: function(form) {
           var user = Object.fromEntries((new FormData(form)).entries());
-          userService.add(todo);
+          userService.add(user);
         }
       });
       userService.list();
@@ -90,7 +90,7 @@ var userService = {
     },
 
     delete: function(id){
-      $('.todo-button').attr('disabled', true);
+      $('.user-button').attr('disabled', true);
       $.ajax({
         url: 'rest/users/'+id,
         type: 'DELETE',
