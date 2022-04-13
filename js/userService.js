@@ -1,103 +1,79 @@
-var userService = {
-    init: function(){
-      $('#addUserForm').validate({
-        submitHandler: function(form) {
-          var user = Object.fromEntries((new FormData(form)).entries());
-          userService.add(user);
-        }
-      });
-      userService.list();
-    },
+var TodoService = {
 
-    list: function(){
-      $.get("rest/users", function(data) {
-        $("#user-list").html("");
-        var html = "";
-        for(let i = 0; i < data.length; i++){
-          html += `
-          <div class="col-lg-3">
-            <div class="card">
-              <img class="card-img-top" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_17ff3c8cf14%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_17ff3c8cf14%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22107.19140625%22%20y%3D%2296.3%22%3E286x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">`+ data[i].name +`</h5>
-                <p class="card-text">`+ data[i].age +`</p>
-                <p class="card-text">`+ data[i].registered +`</p>
-                <p class="card-text">`+ data[i].speciality +`</p>
-                <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-primary todo-button" onclick="userService.get(`+data[i].id+`)">Edit</button>
-                  <button type="button" class="btn btn-danger todo-button" onclick="userService.delete(`+data[i].id+`)">Delete</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          `;
-        }
-        $("#user-list").html(html);
-      });
-    },
+  add: function(user){
+    $.ajax({
+      url: 'rest/users',
+      type: 'POST',
+      data: JSON.stringify(user),
+      contentType: "application/json",
+      dataType: "json",
+      success: function(result) {
+        // append to the list
+        $("#notes-users").append(`<div class="list-group-item note-user-`+result.id+`">
+          <button class="btn btn-danger btn-sm float-end" onclick="UserService.delete(`+result.id+`)">delete</button>
+          <p class="list-group-item-text">`+result.description+`</p>
+        </div>`);
+        toastr.success("Added !");
+      }
+    });
+  },
 
-    get: function(id){
-      $('.user-button').attr('disabled', true);
-      $.get('rest/users/'+id, function(data){
-        $("#age").val(data.age);
-        $("#id").val(data.id);
-        $("#name").val(data.name);
-        $("#registered").val(data.registered);
-        $("#speciality").val(data.speciality);
-        $("#exampleModal").modal("show");
-        $('.user-button').attr('disabled', false);
-      })
-    },
+  list_by_note_id: function(note_id){
+    $("#notes-users").html('loading ...');
+    $.get("rest/notes/"+note_id+"/users", function(data) {
+      var html = "";
+      for(let i = 0; i < data.length; i++){
+        html += `<div class="list-group-item note-user-`+data[i].id+`">
+          <button class="btn btn-danger btn-sm float-end" onclick="UserService.delete(`+data[i].id+`)">delete</button>
+          <p class="list-group-item-text">`+data[i].description+`</p>
+        </div>`;
+      }
+      $("#notes-users").html(html);
+    });
 
-    add: function(user){
-      $.ajax({
-        url: 'rest/users',
-        type: 'POST',
-        data: JSON.stringify(user),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(result) {
-            $("#users-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
-            userService.list(); // perf optimization
-            $("#addUserModal").modal("hide"); //trying 
-        }
-      });
-    },
+    // note id populate and form validation
+    $('#add-user-form input[name="note_id"]').val(note_id);
+    $('#add-user-form input[name="created"]').val(UserService.current_date());
 
-    update: function(){
-      $('.save-user-button').attr('disabled', true);
-      var user = {};
+    $('#add-user-form').validate({
+      submitHandler: function(form) {
+        var entity = Object.fromEntries((new FormData(form)).entries());
+        UserService.add(entity);
+        $('#add-user-form input[name="description"]').val("");
+        toastr.info("Adding ...");
+      }
+    });
+    $("#userModal").modal('show');
+  },
 
-      user.name = $('#name').val();
-      user.age = $('#age').val();
-      user.registered = $('#registered').val();
-      user.speciality = $('#speciality').val();
+  delete: function(id){
+    var old_html = $("#notes-users").html();
+    $('.note-user-'+id).remove();
+    toastr.info("Deleting in background ...");
+    $.ajax({
+      url: 'rest/users/'+id,
+      type: 'DELETE',
+      success: function(result) {
+        toastr.success("Deleted !");
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        toastr.error(XMLHttpRequest.responseJSON.message);
+        $("#notes-users").html(old_html);
+        //alert("Status: " + textStatus); alert("Error: " + errorThrown);
+      }
+    });
+  },
 
-      $.ajax({
-        url: 'rest/users/'+$('#id').val(),
-        type: 'PUT',
-        data: JSON.stringify(user),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(result) {
-            $("#exampleModal").modal("hide");
-            $('.save-user-button').attr('disabled', false);
-            $("#user-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
-            userService.getUsers(); // perf optimization
-            console.log(result);
-        }
-      });
-    },
+  current_date: function(){
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
 
-    delete: function(id){
-      $('.user-button').attr('disabled', true);
-      $.ajax({
-        url: 'rest/users/'+id,
-        type: 'DELETE',
-        success: function(result) {
-            $("#user-list").html('<div class="spinner-border" role="status"> <span class="sr-only"></span>  </div>');
-            userService.list();
-        }
-      });
-    },
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    return yyyy+"-"+mm+"-"+dd;
+  }
+
 }
