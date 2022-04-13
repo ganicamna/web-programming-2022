@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir "ltr">
-<!-- USER page content-->
+<html lang="en" dir="ltr">
 
 <head>
   <meta charset="utf-8">
-  <title>PhotograpyApp</title>
+  <title>ToDo App</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
   <style>
     .error{
       color:red;
@@ -19,7 +19,7 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Carousel</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
@@ -47,12 +47,12 @@
       <!-- Three columns of text below the carousel -->
       <div class="row">
         <div>
-          <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
+          <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addNoteModal">New Note</button>
         </div>
       </div>
 
-      <div id="user-list" class="row">
-          <!-- <div class="spinner-border" role="status"> -->
+      <div id="note-list" class="row">
+        <div class="spinner-border" role="status">
           <span class="sr-only"></span>
         </div>
       </div><!-- /.row -->
@@ -60,72 +60,123 @@
 
   </main>
 </body>
-
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/jquery.validate.min.js"></script>
-<script src="js/userService.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="js/note-service.js"></script>
+<script src="js/todo-service.js"></script>
 
-
- <!-- Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="modal-dialog">
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-       </div>
-       <div class="modal-body">
-         <input id="id" type="hidden" />
-        <div class="form-group"> <input id="name" type="text" class="form-control"/></div>
-         <input id="age" type="text" />
-         <input id="registered" type="text" />
-         <input id="speciality" type="text" />
-
-       </div>
-       <div class="modal-footer">
-         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-           <button type="button" class="btn btn-primary save-user-button" onclick="userService.update()">Save changes</button>
-       </div>
-     </div>
-   </div>
- </div>
-
- <!-- Add Modal -->
-<div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form id="addUserForm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input id="id" type="hidden" />
+        <input id="description" type="text" />
+        <input id="created" type="hidden" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save-todo-button" onclick="ToDoService.update()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addNoteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addNoteForm">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add user</h5>
+          <h5 class="modal-title">Note</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="form-group">
               <label>Name</label>
-              <input name="name" type="text" class="form-control required" placeholder="Enter name" required>
+              <input name="name" type="text" class="form-control required" placeholder="Enter name">
             </div>
             <div class="form-group">
-              <label>Age</label>
-              <input name="age" type="text" class="form-control required" placeholder="Enter age" required>
+              <label>Description</label>
+              <input name="description" type="text" class="form-control required" placeholder="Enter description">
             </div>
-
             <div class="form-group">
-              <label>Speciality</label>
-              <input name="speciality" type="text" class="form-control required" placeholder="Enter speciality" required>
+              <label>Color</label>
+              <input name="color" value="white" type="hidden" class="form-control required" placeholder="Enter color">
+              <div class="form-control btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn" style="background-color:red; color:red;" onclick="NoteService.choose_color('red');">X</button>
+                <button type="button" class="btn" style="background-color:yellow; color: yellow;" onclick="NoteService.choose_color('yellow');">X</button>
+                <button type="button" class="btn" style="background-color:blue; color:blue;" onclick="NoteService.choose_color('blue');">X</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Created</label>
+              <input name="created" type="date" class="form-control required" placeholder="Created date">
             </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" onclick="userService.init()">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
+
+<div class="modal fade" id="todoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">ToDos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+
+            <div id="notes-todos" class="list-group">
+              <div class="list-group-item">
+                <button class="btn btn-danger btn-sm float-end">delete</button>
+                <p class="list-group-item-text">kkkkkk</p>
+              </div>
+              <div class="list-group-item">
+                <button class="btn btn-danger btn-sm float-end">delete</button>
+                <p class="list-group-item-text">kkkkkk</p>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+          <form id="add-todo-form" class="form">
+            <input name="note_id" type="hidden" />
+            <div class="row" style="padding: 20px;">
+              <div class="col-sm-4">
+                <input name="description" type="text" class="form-control required" placeholder="Todo">
+              </div>
+              <div class="col-sm-4">
+                <input name="created" type="date" class="form-control required" placeholder="Created">
+              </div>
+              <div class="col-sm-4">
+                <button type="submit" class="btn btn-primary mb-2">Add</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer"> </div>
+    </div>
+  </div>
+</div>
+
 <script>
-  userService.init();
+  NoteService.init();
 </script>
 
 </html>

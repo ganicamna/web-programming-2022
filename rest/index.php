@@ -3,52 +3,20 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once 'dao/UserDao.class.php';
-require_once '../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/services/NoteService.class.php';
+require_once __DIR__.'/services/TodoService.class.php';
 
-Flight::register('userDao', 'UserDao'); //?
+Flight::register('todoService', 'TodoService');
+Flight::register('noteService', 'NoteService');
 
-// CRUD operations for todos entity
-
-/**
-* List all users
-*/
-Flight::route('GET /users', function(){
-  Flight::json(Flight::userDao()->get_all());
+Flight::map('error', function(Exception $ex){
+    // Handle error
+    Flight::json(['message' => $ex->getMessage()], 500);
 });
 
-/**
-* List invidiual user
-*/
-Flight::route('GET /users/@id', function($id){
-  Flight::json(Flight::todoDao()->get_by_id($id));
-});
-
-/**
-* add user
-*/
-Flight::route('POST /users', function(){
-  $data = Flight::request()->data->getData();
-  $data['registered'] = date("Y-m-d H:i:s");
-  Flight::json(Flight::userDao()->add($data));
-});
-
-/**
-* update user
-*/
-Flight::route('PUT /users/@id', function($id){
-  $data = Flight::request()->data->getData();
-  $data['id'] = $id;
-  Flight::json(Flight::userDao()->update($data));
-});
-
-/**
-* delete user
-*/
-Flight::route('DELETE /users/@id', function($id){
-  Flight::userDao()->delete($id);
-  Flight::json(["message" => "deleted"]);
-});
+require_once __DIR__.'/routes/TodoRoutes.php';
+require_once __DIR__.'/routes/NoteRoutes.php';
 
 Flight::start();
 ?>
