@@ -1,4 +1,4 @@
-var TodoService = {
+var UserService = {
 
   add: function(user){
     $.ajax({
