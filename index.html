@@ -17,7 +17,7 @@
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Carousel</a>
+        <a class="navbar-brand" href="#">ToDo Application</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -65,6 +65,7 @@
 <script src="js/jquery.validate.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="js/note-service.js"></script>
+<script src="js/todo-service.js"></script>
 <script src="js/user-service.js"></script>
 
 <!-- Modal -->
@@ -178,7 +179,12 @@
 </div>
 
 <script>
-  NoteService.init();
+    var token = localStorage.getItem("token");
+    if (token){
+        NoteService.init();
+    }else{
+        window.location.replace("login.html");
+   }
 </script>
 
 </html>
